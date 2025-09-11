@@ -5,10 +5,15 @@ class StringCalculator
         if numbers.start_with?("//")
             delimiter, numbers = numbers.split("\n", 2)
             delimiter = delimiter[2..]
-            numbers.split(delimiter).map(&:to_i).sum
+            num_list = numbers.split(delimiter).map(&:to_i)
         else
             delimiters = [",", "\n"]
-            numbers.split(Regexp.union(delimiters)).map(&:to_i).sum
+            num_list = numbers.split(Regexp.union(delimiters)).map(&:to_i)
         end
+
+        negatives = num_list.select { |n| n < 0}
+        raise "negative numbers not allowed #{negatives.join(',')}" if negatives.any?
+
+        num_list.sum
     end
 end
